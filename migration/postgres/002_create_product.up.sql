@@ -1,6 +1,6 @@
 CREATE TABLE product (
     id            BIGSERIAL    NOT NULL UNIQUE,
-    guid          UUID         NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
+    guid          UUID         NOT NULL PRIMARY KEY,
     name          VARCHAR(255) NOT NULL UNIQUE,
     description   TEXT,
     price         BIGINT       NOT NULL,
