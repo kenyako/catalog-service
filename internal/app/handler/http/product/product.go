@@ -75,13 +75,14 @@ func (h *handler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := entity.ResponseProductCreate{
+	resp := entity.ResponseProductUpdate{
 		GUID:         product.GUID,
 		Name:         product.Name,
 		Description:  product.Description,
 		Price:        product.Price,
 		CategoryGUID: product.CategoryGUID,
 		CreatedAt:    product.CreatedAt,
+		UpdatedAt:    product.UpdatedAt,
 	}
 
 	httph.SendJSON(w, http.StatusOK, resp)
@@ -109,11 +110,6 @@ func (h *handler) List(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := req.Validate(); err != nil {
-		httph.HandleError(w, err)
-		return
-	}
-
 	products, err := h.srv.List(r.Context(), req)
 	if err != nil {
 		httph.HandleError(w, err)
@@ -130,6 +126,7 @@ func (h *handler) List(w http.ResponseWriter, r *http.Request) {
 			Price:        product.Price,
 			CategoryGUID: product.CategoryGUID,
 			CreatedAt:    product.CreatedAt,
+			UpdatedAt:    product.UpdatedAt,
 		})
 	}
 

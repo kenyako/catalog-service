@@ -58,14 +58,6 @@ type RequestProductList struct {
 	CategoryGUID *uuid.UUID `json:"category_guid"`
 }
 
-func (r RequestProductList) Validate() error {
-	if r.CategoryGUID.IsNil() {
-		return ErrIncorrectParameters
-	}
-
-	return nil
-}
-
 type ResponseProductCreate struct {
 	GUID         uuid.UUID `json:"guid"`
 	Name         string    `json:"name"`
