@@ -18,8 +18,12 @@ func (queryBinding) Bind(req *http.Request, obj any) error {
 	values := req.URL.Query()
 
 	if err := formDecoder.Decode(obj, values); err != nil {
+		return &bindingError{msg: "incorrect parameters"}
+	}
+
+	if err := validate(obj); err != nil {
 		return &bindingError{msg: err.Error()}
 	}
 
-	return validate(obj)
+	return nil
 }

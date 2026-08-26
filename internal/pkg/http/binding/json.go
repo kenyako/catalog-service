@@ -18,8 +18,12 @@ func (jsonBinding) Bind(req *http.Request, obj any) error {
 	}
 
 	if err := httph.DecodeJSON(req, obj); err != nil {
+		return &bindingError{msg: "incorrect parameters"}
+	}
+
+	if err := validate(obj); err != nil {
 		return &bindingError{msg: err.Error()}
 	}
 
-	return validate(obj)
+	return nil
 }

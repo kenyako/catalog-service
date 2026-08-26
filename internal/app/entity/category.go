@@ -26,7 +26,7 @@ type RequestCategoryCreate struct {
 }
 
 type RequestCategoryUpdate struct {
-	Name string `json:"name" binding:"required,min=2,max=255"`
+	Name string `json:"name" binding:"omitempty,min=2,max=255"`
 }
 
 type ResponseCategoryCreate struct {
