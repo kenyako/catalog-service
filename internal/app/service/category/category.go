@@ -94,7 +94,7 @@ func (s *srv) Delete(ctx context.Context, guid uuid.UUID) error {
 		return entity.ErrNotFound
 	}
 
-	products, err := s.repoProduct.List(ctx, nil, &guid)
+	products, err := s.repoProduct.List(ctx, nil, &guid, nil, nil)
 	if err != nil {
 		return err
 	}
