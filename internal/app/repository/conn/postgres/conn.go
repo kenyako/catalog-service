@@ -78,7 +78,7 @@ func NewClient(ctx context.Context, cfg section.RepositoryPostgres) (*Client, er
 
 	client := &Client{
 		rawBunDB: bunDB,
-		_bunDB:   bunDB,
+		_bunDB:   newTxInjector(bunDB),
 		cfg:      cfg,
 	}
 
@@ -137,4 +137,36 @@ func (c *Client) Migrate(ctx context.Context) (oldVer, newVer int64, err error) 
 	}
 
 	return oldVer, newVer, nil
+}
+
+func (c *Client) InsideTx(ctx context.Context, fn func(ctx context.Context) error) error {
+	if tx := getTxFromContext(ctx); tx.Tx != nil {
+		return fn(ctx)
+	}
+
+	tx, err := c.rawBunDB.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("begin transaction: %w", err)
+	}
+
+	done := false
+	defer func() {
+		if !done {
+			_ = tx.Rollback()
+		}
+	}()
+
+	txCtx := setTxToContext(ctx, tx)
+
+	if err := fn(txCtx); err != nil {
+		return fmt.Errorf("execute transaction: %w", err)
+	}
+
+	done = true
+
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("commit transaction: %w", err)
+	}
+
+	return nil
 }
