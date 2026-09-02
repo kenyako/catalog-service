@@ -4,11 +4,11 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
 	"net/url"
 	"strconv"
 	"time"
 
+	"github.com/rs/zerolog/log"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
@@ -43,8 +43,11 @@ func NewClient(ctx context.Context, cfg section.RepositoryPostgres) (*Client, er
 	dsnURL.RawQuery = query.Encode()
 	dsn := dsnURL.String()
 
-	log.Printf("Postgres DSN built. DialTimeout=%v, ReadTimeout=%v, WriteTimeout=%v",
-		cfg.DialTimeout, cfg.ReadTimeout, cfg.WriteTimeout)
+	log.Info().
+		Str("dial_timeout", cfg.DialTimeout.String()).
+		Str("read_timeout", cfg.ReadTimeout.String()).
+		Str("write_timeout", cfg.WriteTimeout.String()).
+		Msg("Initializing PostgreSQL connection")
 
 	opts := []pgdriver.Option{
 		pgdriver.WithDSN(dsn),
