@@ -160,17 +160,13 @@ func (b *Builder) BuildRepoProduct() {
 
 func (b *Builder) BuildServiceCategory() {
 	b.exec(func(b *Builder) {
-		service := scategory.NewService(b.categoryRepo, b.productRepo)
-
-		b.categoryService = service
+		b.categoryService = scategory.NewService(b.categoryRepo, b.productRepo)
 	}, b.categoryRepo, b.productRepo)
 }
 
 func (b *Builder) BuildServiceProduct() {
 	b.exec(func(b *Builder) {
-		service := sproduct.NewService(b.productRepo, b.categoryRepo)
-
-		b.productService = service
+		b.productService = sproduct.NewService(b.productRepo, b.categoryRepo)
 	}, b.productRepo, b.categoryRepo)
 }
 
@@ -180,17 +176,13 @@ func (b *Builder) BuildServiceProduct() {
 
 func (b *Builder) BuildHandlerHttpCategory() {
 	b.exec(func(b *Builder) {
-		handler := hcategory.NewHandler(b.categoryService)
-
-		b.categoryHandler = handler
+		b.categoryHandler = hcategory.NewHandler(b.categoryService)
 	}, b.categoryService)
 }
 
 func (b *Builder) BuildHandlerHttpProduct() {
 	b.exec(func(b *Builder) {
-		handler := hproduct.NewHandler(b.productService)
-
-		b.productHandler = handler
+		b.productHandler = hproduct.NewHandler(b.productService)
 	}, b.productService)
 }
 

@@ -96,7 +96,7 @@ func (p *httpProc) StartAsync(ctx context.Context, wg *sync.WaitGroup) {
 	processor.WatchForShutdown(
 		ctx,
 		wg,
-		processor.NewCloserContextFunc(p.server.Shutdown, ctx, 5*time.Second),
+		processor.NewCloserContextFunc(p.server.Shutdown, context.Background(), 5*time.Second),
 	)
 }
 
