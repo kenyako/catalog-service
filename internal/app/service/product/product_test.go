@@ -557,7 +557,7 @@ func TestListProductSuite(t *testing.T) {
 	suite.Run(t, new(listProductSuite))
 }
 
-func (s *deleteProductSuite) TestList() {
+func (s *listProductSuite) TestList() {
 	type args struct {
 		req entity.RequestProductList
 	}
